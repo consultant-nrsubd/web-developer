@@ -13,36 +13,110 @@ const getDataForChart = async (req, res) => {
     return data;
   }
 
-  if (req.query.name != 'users') {
+  if (req.query.name != 'users_and_sessions') {
     return []
   }
 
-  if ((req.query.metrics != 'users') && (req.query.metrics != 'sessions') && (req.query.metrics != 'norm_sessions')) {
-    return []
+  switch (req.query.context) {
+    case 'metrics':
+      if (!req.query.metrics && req.query.networking && req.query.set && req.query.source) {
+        return [
+          {
+            name: 'Количество пользователей',
+            data: getData(10)
+          },
+          {
+            name: 'Количество сессий',
+            data: getData(10)
+          }
+        ];
+      } else {
+        return [];
+      }
+      break;
+    case 'networking':
+      if (req.query.metrics && !req.query.networking && req.query.set && req.query.source) {
+        return [
+          {
+            name: 'Все комплекты',
+            data: getData(10)
+          },
+          {
+            name: 'Локальный',
+            data: getData(10)
+          },
+          {
+            name: 'Сетевой',
+            data: getData(10)
+          },
+          {
+            name: 'Флеш',
+            data: getData(10)
+          }
+        ];
+      } else {
+        return [];
+      }
+      break;
+    case 'set':
+      if (req.query.metrics && req.query.networking && !req.query.set && req.query.source) {
+        return [
+          {
+            name: 'Все комплекты',
+            data: getData(10)
+          },
+          {
+            name: 'Полный',
+            data: getData(10)
+          },
+          {
+            name: 'Бухгалтерский',
+            data: getData(10)
+          },
+          {
+            name: 'Юридический',
+            data: getData(10)
+          },
+          {
+            name: 'Бюджетный',
+            data: getData(10)
+          },
+          {
+            name: 'Сводный региональный',
+            data: getData(10)
+          },
+          {
+            name: 'Пустой',
+            data: getData(10)
+          },
+          {
+            name: 'Неизвестно',
+            data: getData(10)
+          }
+        ];
+      } else {
+        return [];
+      }
+      break;
+    case 'source':
+      if (req.query.metrics && req.query.networking && req.query.set && !req.query.source) {
+        return [
+          {
+            name: 'Все данные',
+            data: getData(10)
+          },
+          {
+            name: 'Интернет-пополнение',
+            data: getData(10)
+          }
+        ];
+      } else {
+        return [];
+      }
+      break;
+    default:
+      return []
   }
-
-  if ((req.query.type != 'all') && (req.query.type != 'full') && (req.query.type != 'buh')) {
-    return []
-  }
-
-  if ((req.query.source != 'all') && (req.query.source != 'internet')) {
-    return []
-  }
-
-  return [
-    {
-      name: 'Все',
-      data: getData(10)
-    },
-    {
-      name: 'Локальный',
-      data: getData(10)
-    },
-    {
-      name: 'Сетевой',
-      data: getData(10)
-    }
-  ];
 }
 
 module.exports = getDataForChart;

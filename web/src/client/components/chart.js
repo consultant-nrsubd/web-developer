@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import HighchartsReact from 'highcharts-react-official';
 import { Highcharts, defaultOptions } from '../services/highcharts';
 
-const useStyles = makeStyles(theme => ({
-  chart: {
-    marginTop: '15px',
-    width: '80%',
-    position: 'relative',
-    padding: '0px'
-  }
-}));
+const Root = styled.div`
+  margin-top: 15px;
+  width: 80%;
+  position: relative;
+  padding: 0px;
+`;
 
 const Chart = ({ title, data }) => {
-  const classes = useStyles();
   const [optionsChart, setOptionsChart] = useState({
     ...defaultOptions,
   })
@@ -32,13 +29,13 @@ const Chart = ({ title, data }) => {
   }, [title, data])
 
   return (
-    <div className={classes.chart}>
+    <Root>
       <HighchartsReact
         highcharts={Highcharts}
         options={optionsChart}
         constructorType = { 'stockChart' }
       />
-    </div>
+    </Root>
   )
 }
 

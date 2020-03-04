@@ -1,46 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { getQuery } from '../../services/query-service'
 import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 
 import Header from '../header';
 import Chart from '../chart'
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const useStyles = makeStyles(theme => ({
-  main: {
-		width: '100%',
-		backgroundColor: 'rgb(245, 245, 245)',
-  },
-	content: {
-		width: '100%',
-		display: 'flex',
-		height: 'calc(100vh - 50px)',
-		justifyContent: 'center'
-	},
-}));
+const Root = styled.div`
+  width: 100%;
+  background-color: rgb(245, 245, 245);
+`;
+
+const Content = styled.div`
+  width: 100%;
+  display: flex;
+  height: calc(100vh - 50px);
+  justify-content: center;
+`;
 
 const Main = () => {
-	const classes = useStyles();
-
-	const [info, setInfo] = useState();
+	const [data, setData] = useState();
 
 	useEffect(() => {
 		(async() => {
-			const response = await getQuery(`/getDataForChart`, { name: 'users', metrics: 'users', type: 'all', source: 'all'});
-			setInfo(response);
+			const response = await getQuery(`/getDataForChart`, { name: 'users_and_sessions', context: 'metrics', networking: 'all', set: 'all', source: 'all'});
+			setData(response);
 		})();
 	},[])
 
 	return (
-	  <div className={classes.main}>
+	  <Root>
 	    <Header page="main"/>
-	    <div className={classes.content}>
+	    <Content>
 			{
-				info ? <Chart title="Количество пользователей" data={info} /> : <CircularProgress />
+				data ? <Chart title="Количество пользователей и сессий" data={data} /> : <CircularProgress />
 			}
-	    </div>
-	  </div>
+	    </Content>
+	  </Root>
   )
 }
 

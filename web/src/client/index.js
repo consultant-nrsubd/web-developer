@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './components/app';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { StylesProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   palette: {
@@ -22,9 +23,11 @@ import store from './store';
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <MuiThemeProvider theme = { theme }>
-        <App />
-      </MuiThemeProvider>
+      <StylesProvider injectFirst>
+        <MuiThemeProvider theme = { theme }>
+          <App />
+        </MuiThemeProvider>
+      </StylesProvider>
     </Router>
   </Provider>,
   document.getElementById('app')
